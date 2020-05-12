@@ -1,7 +1,7 @@
 var fish = document.getElementById("fish");
 var request = new XMLHttpRequest();
 
-request.open('GET', 'http://acnhapi.com/fish', true);
+request.open('GET', 'https://acnhapi.com/fish', true);
 
 request.onload = function () {
     var data = JSON.parse(this.response);
@@ -75,7 +75,7 @@ request.onload = function () {
                 data[key].availability.isAllYear?yearavail = "All year":yearavail = data[key].availability["month-northern"];
                 data[key].availability.isAllDay?dayavail = "All day":dayavail = data[key].availability.time;
 
-                fishpara.innerHTML = "<img src='http://acnhapi.com/icons/fish/" + data[key].id + "' height=64 width=64><br><h4>" + capitalizeFirstLetter(data[key]["file-name"].replace(/_/g, " ")) + "</h4>Availability: " + yearavail + "; " +
+                fishpara.innerHTML = "<img src='https://acnhapi.com/icons/fish/" + data[key].id + "' height=64 width=64><br><h4>" + capitalizeFirstLetter(data[key]["file-name"].replace(/_/g, " ")) + "</h4>Availability: " + yearavail + "; " +
                 dayavail + "<br>Location: " +
                 data[key].availability.location + "<br>Rarity: " +
                 data[key].availability.rarity + "<br>Shadow: " +
