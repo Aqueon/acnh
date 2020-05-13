@@ -62,7 +62,7 @@ fish_request.onload = function () {
                 fish_data[key].availability.isAllYear?fish_yearavail = "All year":fish_yearavail = fish_data[key].availability["month-northern"];
                 fish_data[key].availability.isAllDay?fish_dayavail = "All day":fish_dayavail = fish_data[key].availability.time;
 
-                fishpara.innerHTML = "<img src='https://acnhapi.com/icons/fish/" + fish_data[key].id + "' height=64 width=64><h4>" + capitalizeFirstLetter(fish_data[key]["file-name"].replace(/_/g, " ")) + "</h4><p class='details'>Availability: " + fish_yearavail + "; " +
+                fishpara.innerHTML = "<img src='https://acnhapi.com/icons/fish/" + fish_data[key].id + "' height=64 width=64><h4>" + capitalizeFirstLetter(fish_data[key].name["name-eneu"]) + " (" + fish_data[key]["file-name"] +")</h4><p class='details'>Availability: " + fish_yearavail + "; " +
                 fish_dayavail + "</p><p class='details'>Location: " +
                 fish_data[key].availability.location + "</p><p class='details'>Rarity: " +
                 fish_data[key].availability.rarity + "</p><p class='details'>Shadow: " +
@@ -138,7 +138,7 @@ bugs_request.onload = function () {
                 bug_data[key].availability.isAllYear?bug_yearavail = "All year":bug_yearavail = bug_data[key].availability["month-northern"];
                 bug_data[key].availability.isAllDay?bug_dayavail = "All day":bug_dayavail = bug_data[key].availability.time;
 
-                bugpara.innerHTML = "<img src='https://acnhapi.com/icons/bugs/" + bug_data[key].id + "' height=64 width=64><h4>" + capitalizeFirstLetter(bug_data[key]["file-name"].replace(/_/g, " ")) + "</h4><p class='details'>Availability: " + bug_yearavail + "; " +
+                bugpara.innerHTML = "<img src='https://acnhapi.com/icons/bugs/" + bug_data[key].id + "' height=64 width=64><h4>" + capitalizeFirstLetter(bug_data[key].name["name-eneu"]) + " (" + bug_data[key]["file-name"] +")</h4><p class='details'>Availability: " + bug_yearavail + "; " +
                 bug_dayavail + "</p><p class='details'>Location: " +
                 bug_data[key].availability.location + "</p><p class='details'>Rarity: " +
                 bug_data[key].availability.rarity + "</p><p class='details'>Price: " +
