@@ -84,8 +84,6 @@ bugs_request.open('GET', 'https://acnhapi.com/bugs', true);
 bugs_request.onload = function () {
     var bug_data = JSON.parse(this.response);
 
-    console.log (bug_data);
-
     for (const key in bug_data) {
         if (bug_data.hasOwnProperty(key)) {
             var bug_monthlimit;
@@ -120,8 +118,6 @@ bugs_request.onload = function () {
                 bug_timelimit[0] = 0;
                 bug_timelimit[1] = 24;
             }
-
-            console.log(bug_data[key]["file-name"], bug_timelimit[0], bug_timelimit[1]);
             
             if (parseInt(bug_timelimit[0], 10) > parseInt(bug_timelimit[1], 10) && hour <= bug_timelimit[1]-1) {
                 bug_timelimit[0] = bug_timelimit[0] - 24;
