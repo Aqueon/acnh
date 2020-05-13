@@ -1,0 +1,13 @@
+#fish {
+    width: 50%;
+    float: left;
+}
+
+#bugs {
+    width: 50%;
+    float: left;
+}
+
+.details {
+    margin: 0px;
+}

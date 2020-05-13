@@ -1,92 +1,155 @@
 var fish = document.getElementById("fish");
-var request = new XMLHttpRequest();
+var fish_request = new XMLHttpRequest();
 
-request.open('GET', 'https://acnhapi.com/fish', true);
+var date = new Date();
+var month = date.getMonth();
+var hour = date.getHours();
 
-request.onload = function () {
-    var data = JSON.parse(this.response);
+fish_request.open('GET', 'https://acnhapi.com/fish', true);
 
-    // console.log(data);
+fish_request.onload = function () {
+    var fish_data = JSON.parse(this.response);
 
-    var date = new Date();
-    var month = date.getMonth();
-    var hour = date.getHours();
+    for (const key in fish_data) {
+        if (fish_data.hasOwnProperty(key)) {
+            var fish_monthlimit;
 
-    // var d1 = new Date(date.getFullYear(), date.getMonth());
-    // var d2 = new Date(2021, 0, 0, 9);
-
-    // var txt = "foo3bar5";
-    // var num = string.match(/\d/g);
-
-    // console.log(num[1]);
-    
-
-    for (const key in data) {
-        if (data.hasOwnProperty(key)) {
-            var monthlimit;
-
-            if (!data[key].availability.isAllYear) {
-                monthlimit = data[key].availability["month-northern"].match(/\d+/g);
+            if (!fish_data[key].availability.isAllYear) {
+                fish_monthlimit = fish_data[key].availability["month-northern"].match(/\d+/g);
             } else {
-                monthlimit[0] = 1;
-                monthlimit[1] = 12;
+                fish_monthlimit[0] = 1;
+                fish_monthlimit[1] = 12;
             }
-            if (parseInt(monthlimit[0], 10) > parseInt(monthlimit[1], 10) && month <= monthlimit[1]-1) {
-                monthlimit[0] = monthlimit[0] - 12;
+            if (parseInt(fish_monthlimit[0], 10) > parseInt(fish_monthlimit[1], 10) && month <= fish_monthlimit[1]-1) {
+                fish_monthlimit[0] = fish_monthlimit[0] - 12;
             }
-            if (parseInt(monthlimit[0], 10) > parseInt(monthlimit[1], 10) && month >= monthlimit[0]-1) {
-                monthlimit[1] = parseInt(monthlimit[1], 10) + 12;
+            if (parseInt(fish_monthlimit[0], 10) > parseInt(fish_monthlimit[1], 10) && month >= fish_monthlimit[0]-1) {
+                fish_monthlimit[1] = parseInt(fish_monthlimit[1], 10) + 12;
             }
-            if (parseInt(monthlimit[2], 10) > parseInt(monthlimit[3], 10) && month <= monthlimit[3]-1) {
-                monthlimit[2] = monthlimit[2] - 12;
+            if (parseInt(fish_monthlimit[2], 10) > parseInt(fish_monthlimit[3], 10) && month <= fish_monthlimit[3]-1) {
+                fish_monthlimit[2] = fish_monthlimit[2] - 12;
             }
-            if (parseInt(monthlimit[2], 10) > parseInt(monthlimit[3], 10) && month >= monthlimit[3]-1) {
-                monthlimit[3] = parseInt(monthlimit[3], 10) + 12;
+            if (parseInt(fish_monthlimit[2], 10) > parseInt(fish_monthlimit[3], 10) && month >= fish_monthlimit[3]-1) {
+                fish_monthlimit[3] = parseInt(fish_monthlimit[3], 10) + 12;
             }
-            if (monthlimit[1] == null && !data[key].availability.isAllYear) monthlimit[1] = monthlimit[0];
+            if (fish_monthlimit[1] == null && !fish_data[key].availability.isAllYear) fish_monthlimit[1] = fish_monthlimit[0];
 
-            var timelimit = new Array();
+            var fish_timelimit = new Array();
 
-            if (!data[key].availability.isAllDay) {
-                timelimit = data[key].availability.time.match(/\d+/g);
-                data[key].availability.time.substr(1,2)=="am"?timelimit[0]=parseInt(data[key].availability.time.substr(0,1), 10):timelimit[0]=parseInt(data[key].availability.time.substr(0,1), 10)+12;
-                data[key].availability.time.substr(7,2)=="am"?timelimit[1]=parseInt(data[key].availability.time.substr(6,1), 10):timelimit[1]=parseInt(data[key].availability.time.substr(6,1), 10)+12;
+            if (!fish_data[key].availability.isAllDay) {
+                fish_timelimit = fish_data[key].availability.time.match(/\d+/g);
+                if(fish_data[key].availability.time.substr(1,2)==="pm") fish_timelimit[0]=parseInt(fish_timelimit[0], 10)+12;
+                if(fish_data[key].availability.time.substr(-2)==="pm") fish_timelimit[1]=parseInt(fish_timelimit[1], 10)+12;
             } else {
-                timelimit[0] = 1;
-                timelimit[1] = 24;
+                fish_timelimit[0] = 0;
+                fish_timelimit[1] = 24;
             }
             
-            if (parseInt(timelimit[0], 10) > parseInt(timelimit[1], 10) && hour <= timelimit[1]-1) {
-                timelimit[0] = timelimit[0] - 24;
+            if (parseInt(fish_timelimit[0], 10) > parseInt(fish_timelimit[1], 10) && hour <= fish_timelimit[1]-1) {
+                fish_timelimit[0] = fish_timelimit[0] - 24;
             }
-            if (parseInt(timelimit[0], 10) > parseInt(timelimit[1], 10) && hour >= timelimit[0]-1) {
-                timelimit[1] = parseInt(timelimit[1], 10) + 24;
+            if (parseInt(fish_timelimit[0], 10) > parseInt(fish_timelimit[1], 10) && hour >= fish_timelimit[0]-1) {
+                fish_timelimit[1] = parseInt(fish_timelimit[1], 10) + 24;
             }
-            // timelimit[0] < 10 ? timelimit[0] = "0" + timelimit[0] + ":00" : timelimit[0] = timelimit[0] + ":00";
-            // timelimit[1] < 10 ? timelimit[1] = "0" + timelimit[1] + ":00" : timelimit[1] = timelimit[1] + ":00";
+                
             
             
-            if(((month >= monthlimit[0]-1 && month <= monthlimit[1]-1) || (month >= monthlimit[2]-1 && month <= monthlimit[3]))
-                && (hour >= timelimit[0] && hour <= timelimit[1])) {
-                // && (data[key].availability.isAllDay || (hour >= timelimit[0] && hour <= timelimit[1]) || (timelimit[0]>timelimit[1] && ((hour >= timelimit[0] && hour <= 23) || (hour <= timelimit[1] && hour >= 0))))){
+            if(((month >= fish_monthlimit[0]-1 && month <= fish_monthlimit[1]-1) || (month >= fish_monthlimit[2]-1 && month <= fish_monthlimit[3]))
+                && (hour >= fish_timelimit[0] && hour <= fish_timelimit[1])) {
                 var fishpara = document.createElement("p");
-                var yearavail;
-                var dayavail;
-                data[key].availability.isAllYear?yearavail = "All year":yearavail = data[key].availability["month-northern"];
-                data[key].availability.isAllDay?dayavail = "All day":dayavail = data[key].availability.time;
+                var fish_yearavail;
+                var fish_dayavail;
+                fish_data[key].availability.isAllYear?fish_yearavail = "All year":fish_yearavail = fish_data[key].availability["month-northern"];
+                fish_data[key].availability.isAllDay?fish_dayavail = "All day":fish_dayavail = fish_data[key].availability.time;
 
-                fishpara.innerHTML = "<img src='https://acnhapi.com/icons/fish/" + data[key].id + "' height=64 width=64><br><h4>" + capitalizeFirstLetter(data[key]["file-name"].replace(/_/g, " ")) + "</h4>Availability: " + yearavail + "; " +
-                dayavail + "<br>Location: " +
-                data[key].availability.location + "<br>Rarity: " +
-                data[key].availability.rarity + "<br>Shadow: " +
-                data[key].shadow;
+                fishpara.innerHTML = "<img src='https://acnhapi.com/icons/fish/" + fish_data[key].id + "' height=64 width=64><h4>" + capitalizeFirstLetter(fish_data[key]["file-name"].replace(/_/g, " ")) + "</h4><p class='details'>Availability: " + fish_yearavail + "; " +
+                fish_dayavail + "</p><p class='details'>Location: " +
+                fish_data[key].availability.location + "</p><p class='details'>Rarity: " +
+                fish_data[key].availability.rarity + "</p><p class='details'>Shadow: " +
+                fish_data[key].shadow + "</p><p class='details'>Price: " +
+                fish_data[key].price + " (<span title='Price at CJ'>" + fish_data[key]["price-cj"] + "</span>)</p>";
                 fish.appendChild(fishpara);
             }
         }
     }
 }
 
-request.send();
+fish_request.send();
+
+var bugs = document.getElementById("bugs");
+var bugs_request = new XMLHttpRequest();
+
+bugs_request.open('GET', 'https://acnhapi.com/bugs', true);
+
+bugs_request.onload = function () {
+    var bug_data = JSON.parse(this.response);
+
+    console.log (bug_data);
+
+    for (const key in bug_data) {
+        if (bug_data.hasOwnProperty(key)) {
+            var bug_monthlimit;
+
+            if (!bug_data[key].availability.isAllYear) {
+                bug_monthlimit = bug_data[key].availability["month-northern"].match(/\d+/g);
+            } else {
+                bug_monthlimit[0] = 1;
+                bug_monthlimit[1] = 12;
+            }
+            if (parseInt(bug_monthlimit[0], 10) > parseInt(bug_monthlimit[1], 10) && month <= bug_monthlimit[1]-1) {
+                bug_monthlimit[0] = bug_monthlimit[0] - 12;
+            }
+            if (parseInt(bug_monthlimit[0], 10) > parseInt(bug_monthlimit[1], 10) && month >= bug_monthlimit[0]-1) {
+                bug_monthlimit[1] = parseInt(bug_monthlimit[1], 10) + 12;
+            }
+            if (parseInt(bug_monthlimit[2], 10) > parseInt(bug_monthlimit[3], 10) && month <= bug_monthlimit[3]-1) {
+                bug_monthlimit[2] = bug_monthlimit[2] - 12;
+            }
+            if (parseInt(bug_monthlimit[2], 10) > parseInt(bug_monthlimit[3], 10) && month >= bug_monthlimit[3]-1) {
+                bug_monthlimit[3] = parseInt(bug_monthlimit[3], 10) + 12;
+            }
+            if (bug_monthlimit[1] == null && !bug_data[key].availability.isAllYear) bug_monthlimit[1] = bug_monthlimit[0];
+
+            var bug_timelimit = new Array();
+
+            if (!bug_data[key].availability.isAllDay) {
+                bug_timelimit = bug_data[key].availability.time.match(/\d+/g);
+                if(bug_data[key].availability.time.substr(1,2)==="pm") bug_timelimit[0]=parseInt(bug_timelimit[0], 10)+12;
+                if(bug_data[key].availability.time.substr(-2)==="pm") bug_timelimit[1]=parseInt(bug_timelimit[1], 10)+12;
+            } else {
+                bug_timelimit[0] = 0;
+                bug_timelimit[1] = 24;
+            }
+
+            console.log(bug_data[key]["file-name"], bug_timelimit[0], bug_timelimit[1]);
+            
+            if (parseInt(bug_timelimit[0], 10) > parseInt(bug_timelimit[1], 10) && hour <= bug_timelimit[1]-1) {
+                bug_timelimit[0] = bug_timelimit[0] - 24;
+            }
+            if (parseInt(bug_timelimit[0], 10) > parseInt(bug_timelimit[1], 10) && hour >= bug_timelimit[0]-1) {
+                bug_timelimit[1] = parseInt(bug_timelimit[1], 10) + 24;
+            }
+
+            if(((month >= bug_monthlimit[0]-1 && month <= bug_monthlimit[1]-1) || (month >= bug_monthlimit[2]-1 && month <= bug_monthlimit[3]))
+                && (hour >= bug_timelimit[0] && hour <= bug_timelimit[1])) {
+                var bugpara = document.createElement("p");
+                var bug_yearavail;
+                var bug_dayavail;
+                bug_data[key].availability.isAllYear?bug_yearavail = "All year":bug_yearavail = bug_data[key].availability["month-northern"];
+                bug_data[key].availability.isAllDay?bug_dayavail = "All day":bug_dayavail = bug_data[key].availability.time;
+
+                bugpara.innerHTML = "<img src='https://acnhapi.com/icons/bugs/" + bug_data[key].id + "' height=64 width=64><h4>" + capitalizeFirstLetter(bug_data[key]["file-name"].replace(/_/g, " ")) + "</h4><p class='details'>Availability: " + bug_yearavail + "; " +
+                bug_dayavail + "</p><p class='details'>Location: " +
+                bug_data[key].availability.location + "</p><p class='details'>Rarity: " +
+                bug_data[key].availability.rarity + "</p><p class='details'>Price: " +
+                bug_data[key].price + " (<span title='Price at Flick'>" + bug_data[key]["price-flick"] + "</span>)</p>";
+                bugs.appendChild(bugpara);
+            }
+        }
+    }
+}
+
+bugs_request.send();
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
